@@ -44,7 +44,7 @@ canvas {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
 }
 
 #game-canvas {
@@ -61,7 +61,7 @@ canvas {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   display: none;
   justify-content: center;
   align-items: center;
@@ -637,12 +637,12 @@ canvas {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08); /* Always visible slightly */
   border: 2px solid rgba(255, 255, 255, 0.2);
-  display: none; /* Only show when touching */
+  display: block; 
 }
 
 #joystick-stick {
@@ -774,25 +774,27 @@ canvas {
   /* HUD Elements */
   #health-bar {
     width: 200px;
-    bottom: 90px;
+    bottom: 20px; /* Base it low */
   }
 
-  /* Hotbar - Scaled down for mobile width */
+  /* Hotbar - Move to top center for mobile to avoid bottom UI blocking */
   #hotbar {
     width: 98vw;
     display: flex;
     justify-content: center;
-    gap: 2px;
+    gap: 4px;
+    top: 10px;
+    bottom: auto; /* Override bottom */
   }
 
   .hotbar-slot {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 6px;
   }
   
   .hotbar-slot .slot-icon {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
   
   .hotbar-slot .slot-name {
@@ -803,17 +805,45 @@ canvas {
     font-size: 0.5rem;
   }
 
+  /* Adjust Objective */
+  #objective-display {
+    top: 60px; /* Below hotbar */
+    transform: translateX(-50%) scale(0.85);
+    white-space: nowrap;
+  }
+
   /* Currency scaling */
   #currency-display {
-    top: 50px;
-    transform: scale(0.85);
+    top: 100px; /* Push down to avoid Pause and Objective */
+    right: 10px;
+    transform: scale(0.8);
     transform-origin: top right;
   }
 
-  #objective-display {
-    top: 50px;
-    transform: translateX(-50%) scale(0.85);
-    white-space: nowrap;
+  /* Mobile Controls Fine Tuning */
+  #joystick-zone {
+    bottom: 40px;
+    left: 20px;
+    width: 140px;
+    height: 140px;
+  }
+  
+  #btn-mobile-action {
+    bottom: 120px;
+    right: 20px;
+    width: 75px;
+    height: 75px;
+    font-size: 34px;
+  }
+
+  #btn-mobile-jump {
+    bottom: 40px;
+    right: 90px;
+  }
+  
+  #btn-mobile-interact {
+    bottom: 220px;
+    right: 30px;
   }
 }
 
