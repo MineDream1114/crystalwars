@@ -2,7 +2,7 @@
  * Crystal Wars - Economy System
  */
 
-import { CurrencyType } from '../types';
+import { Currency } from '../types';
 
 export const CURRENCY_NAMES: Record<CurrencyType, string> = {
   copper: 'copper',
