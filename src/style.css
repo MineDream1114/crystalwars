@@ -604,3 +604,122 @@ canvas {
   border-radius: 3px;
   transition: width 0.05s linear;
 }
+
+/* ========================================
+   Mobile Controls
+   ======================================== */
+
+#mobile-controls {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 40;
+  pointer-events: none; /* Let clicks pass through empty areas */
+}
+
+#mobile-controls.active {
+  display: block;
+}
+
+#joystick-zone {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 150px;
+  height: 150px;
+  pointer-events: auto;
+}
+
+#joystick-base {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: none; /* Only show when touching */
+}
+
+#joystick-stick {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.mobile-btn {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+  backdrop-filter: blur(4px);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.mobile-btn:active {
+  background: rgba(139, 92, 246, 0.5);
+  transform: scale(0.9);
+}
+
+#btn-mobile-jump {
+  bottom: 30px;
+  right: 100px;
+}
+
+#btn-mobile-action {
+  bottom: 80px;
+  right: 20px;
+  width: 70px;
+  height: 70px;
+  font-size: 30px;
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+#btn-mobile-interact {
+  bottom: 160px;
+  right: 40px;
+  background: rgba(245, 158, 11, 0.4);
+  animation: pulsePrompt 2s infinite;
+}
+
+#btn-mobile-pause {
+  top: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  font-size: 18px;
+}
+
+@media (pointer: coarse) {
+  #mobile-controls:not(.hidden) {
+    display: block;
+  }
+}
+
+/* Hide interaction prompt text overlay on mobile and use the big button instead */
+@media (pointer: coarse) {
+  #interact-prompt {
+    display: none !important;
+  }
+}
+

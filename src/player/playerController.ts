@@ -13,6 +13,7 @@ import {
 import { World } from '../world/world';
 import { clamp } from '../utils/helpers';
 import { SoundManager } from '../audio/soundManager';
+import { MobileControls } from '../ui/mobileControls';
 
 export class PlayerController {
   public camera: THREE.PerspectiveCamera;
@@ -28,6 +29,7 @@ export class PlayerController {
   private world: World;
   private fallStartY: number = 0;
   private isFalling: boolean = false;
+  private mobileControls?: MobileControls;
 
   constructor(camera: THREE.PerspectiveCamera, world: World) {
     this.camera = camera;
@@ -36,6 +38,10 @@ export class PlayerController {
     this.velocity = new THREE.Vector3(0, 0, 0);
 
     this.setupInput();
+  }
+
+  setMobileControls(mc: MobileControls) {
+    this.mobileControls = mc;
   }
 
   private setupInput(): void {
@@ -55,6 +61,16 @@ export class PlayerController {
   }
 
   update(_dt: number): void {
+    // Apply mobile look delta
+    if (this.mobileControls) {
+      this.yaw += this.mobileControls.lookDelta.yaw;
+      this.pitch += this.mobileControls.lookDelta.pitch;
+      this.pitch = clamp(this.pitch, -Math.PI / 2 + 0.01, Math.PI / 2 - 0.01);
+      // Reset delta after consumption
+      this.mobileControls.lookDelta.yaw = 0;
+      this.mobileControls.lookDelta.pitch = 0;
+    }
+
     const isSprinting = this.keys.has('ShiftLeft') || this.keys.has('ShiftRight');
     const isSwimming = this.position.y < SEA_LEVEL;
     const baseSpeed = isSprinting ? PLAYER_SPRINT_SPEED : PLAYER_SPEED;
@@ -69,12 +85,22 @@ export class PlayerController {
     );
 
     const moveDir = new THREE.Vector3(0, 0, 0);
+    
+    // Keyboard Input
     if (this.keys.has('KeyW')) moveDir.add(forward);
     if (this.keys.has('KeyS')) moveDir.sub(forward);
     if (this.keys.has('KeyA')) moveDir.sub(right);
     if (this.keys.has('KeyD')) moveDir.add(right);
 
-    if (moveDir.length() > 0) {
+    // Mobile Input
+    if (this.mobileControls) {
+      if (this.mobileControls.moveVector.y < 0) moveDir.add(forward.clone().multiplyScalar(-this.mobileControls.moveVector.y));
+      if (this.mobileControls.moveVector.y > 0) moveDir.sub(forward.clone().multiplyScalar(this.mobileControls.moveVector.y));
+      if (this.mobileControls.moveVector.x < 0) moveDir.sub(right.clone().multiplyScalar(-this.mobileControls.moveVector.x));
+      if (this.mobileControls.moveVector.x > 0) moveDir.add(right.clone().multiplyScalar(this.mobileControls.moveVector.x));
+    }
+
+    if (moveDir.lengthSq() > 0) {
       moveDir.normalize().multiplyScalar(speed);
     }
 
@@ -82,17 +108,9 @@ export class PlayerController {
     this.moveWithCollision(moveDir.x, 0, 0);
     this.moveWithCollision(0, 0, moveDir.z);
 
-    // Jump
+    // Jump (can be called manually from outside by setting key or calling jump())
     if (this.keys.has('Space')) {
-      if (this.isGrounded) {
-        this.velocity.y = PLAYER_JUMP_FORCE;
-        this.isGrounded = false;
-        SoundManager.playJump();
-      } else if (isSwimming) {
-        // swim upwards
-        this.velocity.y += 0.005;
-        this.velocity.y = Math.min(this.velocity.y, PLAYER_JUMP_FORCE * 0.5);
-      }
+      this.jump();
     }
 
     // Gravity
@@ -225,6 +243,18 @@ export class PlayerController {
   launch(force: number): void {
     this.velocity.y = force;
     this.isGrounded = false;
+  }
+
+  jump(): void {
+    const isSwimming = this.position.y < SEA_LEVEL;
+    if (this.isGrounded) {
+      this.velocity.y = PLAYER_JUMP_FORCE;
+      this.isGrounded = false;
+      SoundManager.playJump();
+    } else if (isSwimming) {
+      this.velocity.y += 0.005;
+      this.velocity.y = Math.min(this.velocity.y, PLAYER_JUMP_FORCE * 0.5);
+    }
   }
 
   /**

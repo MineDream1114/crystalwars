@@ -25,6 +25,7 @@ import { showNotification, showInteractPrompt, dist2D } from './utils/helpers';
 import { findChestAt, openChest } from './world/chest';
 import { t } from './localization/i18n';
 import { SoundManager } from './audio/soundManager';
+import { MobileControls } from './ui/mobileControls';
 
 export class Game {
   // Three.js
@@ -50,6 +51,7 @@ export class Game {
   private settingsUI!: SettingsUI;
   private winScreen!: WinScreen;
   private tutorial!: Tutorial;
+  private mobileControls!: MobileControls;
 
   // State
   private currentScreen: GameScreen = 'title';
@@ -60,6 +62,9 @@ export class Game {
   constructor() {
     // Init i18n
     initI18n();
+    
+    // Init Mobile
+    this.mobileControls = new MobileControls();
 
     // Three.js setup
     const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -189,6 +194,7 @@ export class Game {
     // Player
     this.inventory = new Inventory();
     this.player = new PlayerController(this.camera, this.world);
+    this.player.setMobileControls(this.mobileControls);
 
     // Initial chunk load around 0,0
     this.world.updateChunks(0, 0);
@@ -278,12 +284,44 @@ export class Game {
   }
 
   private setupGameInput(): void {
+    // Mobile Overlays Setup
+    if (this.mobileControls.isMobile) {
+      document.getElementById('btn-mobile-jump')?.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        this.player.jump();
+      }, { passive: false });
+      
+      document.getElementById('btn-mobile-action')?.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        SoundManager.init();
+        this.combat.isAttacking = true;
+        this.combat.onLeftClick();
+      }, { passive: false });
+
+      document.getElementById('btn-mobile-action')?.addEventListener('touchend', (e) => {
+         e.preventDefault();
+         this.combat.onLeftClickRelease();
+      });
+
+      document.getElementById('btn-mobile-pause')?.addEventListener('touchstart', (e) => {
+         e.preventDefault();
+         this.showScreen('paused');
+      });
+
+      document.getElementById('btn-mobile-interact')?.addEventListener('touchstart', (e) => {
+         e.preventDefault();
+         this.handleInteract();
+      });
+    }
+
     // Pointer lock
     const canvas = this.renderer.domElement;
     canvas.addEventListener('click', () => {
       SoundManager.init(); // Initialize audio context on first canvas click
       if (this.currentScreen === 'playing' && !document.pointerLockElement) {
-        this.requestPointerLock();
+        if (!this.mobileControls.isMobile) {
+          this.requestPointerLock();
+        }
       }
     });
 
@@ -343,6 +381,7 @@ export class Game {
 
     // Pointer lock change
     document.addEventListener('pointerlockchange', () => {
+      if (this.mobileControls.isMobile) return;
       if (!document.pointerLockElement && this.currentScreen === 'playing') {
         this.showScreen('paused');
       }
@@ -394,6 +433,16 @@ export class Game {
     }
 
     this.currentScreen = screen;
+    
+    // Toggle mobile buttons during gameplay
+    const mobileUI = document.getElementById('mobile-controls');
+    if (mobileUI && this.mobileControls.isMobile) {
+      if (screen === 'playing') {
+        mobileUI.classList.remove('hidden');
+      } else {
+        mobileUI.classList.add('hidden');
+      }
+    }
 
     switch (screen) {
       case 'title':
@@ -490,7 +539,17 @@ export class Game {
     const targetBlock = this.combat.getTargetBlock();
     const lookingAtChest = targetBlock && this.world.getBlock(targetBlock.x, targetBlock.y, targetBlock.z) === 'chest';
     
-    showInteractPrompt(merchantDist < PICKUP_RANGE || !!lookingAtChest);
+    const canInteract = merchantDist < PICKUP_RANGE || !!lookingAtChest;
+    showInteractPrompt(canInteract);
+    
+    // Mobile interact button sync
+    if (this.mobileControls.isMobile) {
+      const btn = document.getElementById('btn-mobile-interact');
+      if (btn) {
+        if (canInteract) btn.classList.remove('hidden');
+        else btn.classList.add('hidden');
+      }
+    }
 
     // Rebuild dirty chunks
     this.world.rebuildDirtyMeshes();

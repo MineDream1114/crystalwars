@@ -77,6 +77,25 @@
       <span data-i18n="pressE">Press [E] to interact</span>
     </div>
     <div id="notification" class="hidden"></div>
+    
+    <!-- Mobile Controls Layer -->
+    <div id="mobile-controls" class="hidden">
+      <!-- Left side: Joystick -->
+      <div id="joystick-zone">
+        <div id="joystick-base">
+          <div id="joystick-stick"></div>
+        </div>
+      </div>
+      <!-- Touch look zone (right half of screen implicitly handles touchmove in mobileControls.ts) -->
+      
+      <!-- Right side buttons -->
+      <button id="btn-mobile-jump" class="mobile-btn">▲</button>
+      <button id="btn-mobile-action" class="mobile-btn">⚒️</button>
+      <button id="btn-mobile-interact" class="mobile-btn hidden">🖐️</button>
+      
+      <!-- Top right pause -->
+      <button id="btn-mobile-pause" class="mobile-btn">⏸️</button>
+    </div>
   </div>
 
   <!-- Shop UI -->

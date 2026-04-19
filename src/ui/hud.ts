@@ -40,6 +40,13 @@ export class HUD {
         <span class="slot-name"></span>
         <span class="slot-count"></span>
       `;
+      
+      // Make it clickable for mobile support
+      slot.addEventListener('pointerdown', (e) => {
+        e.preventDefault(); // Prevent double triggering with touch
+        this.inventory.selectSlot(i);
+      });
+      
       hotbarEl.appendChild(slot);
     }
   }
