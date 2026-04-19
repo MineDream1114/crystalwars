@@ -1,70 +1,154 @@
-/**
- * Crystal Wars - Shared Type Definitions
- */
+export type Language = 'en' | 'ja';
 
-import { ToolTier } from './config';
+export type GamePhase = 'title' | 'playing' | 'paused' | 'shop' | 'win';
 
-export type CurrencyType = 'copper' | 'gold' | 'emerald' | 'diamond';
+export type MultiplayerStatus = 'offline' | 'connecting' | 'online';
 
-export interface Currency {
-  copper: number;
-  gold: number;
-  emerald: number;
-  diamond: number;
+export type Currency = 'copper' | 'gold' | 'emerald' | 'diamond';
+
+export type ToolTier = 'basic' | 'iron' | 'diamond' | 'rainbow';
+
+export type EquipmentId = 'sword' | 'pickaxe' | 'shovel';
+
+export type HotbarItemId =
+  | EquipmentId
+  | 'bow'
+  | 'blocks'
+  | 'purpleDotter'
+  | 'jumpPad';
+
+export type BlockType =
+  | 'grass'
+  | 'dirt'
+  | 'stone'
+  | 'sand'
+  | 'copperOre'
+  | 'goldOre'
+  | 'emeraldOre'
+  | 'diamondOre'
+  | 'bridge';
+
+export type BlockCategory = 'soft' | 'hard' | 'ore' | 'utility';
+
+export type InteractableType =
+  | 'merchant'
+  | 'generator'
+  | 'machine'
+  | 'chest'
+  | 'jumpPad';
+
+export interface Price {
+  currency: Currency;
+  amount: number;
 }
 
-export type ItemId = 
-  | 'sword' | 'pickaxe' | 'shovel' | 'bow' 
-  | 'arrows' | 'purpleDotter' | 'jumpPad' | 'block';
-
-export interface ItemDef {
-  id: ItemId;
-  icon: string;
-  nameKey: string;      // i18n key
-  stackable: boolean;
-  maxStack: number;
-  tier?: ToolTier;
+export interface ToolStats {
+  damage: number;
+  blockDamage: number;
+  cooldown: number;
+  range: number;
 }
 
-export interface HotbarSlot {
-  itemId: ItemId | null;
-  count: number;
-  tier: ToolTier;
+export interface BlockDefinition {
+  color: number;
+  category: BlockCategory;
+  hp: number;
+  solid: boolean;
 }
 
-export interface Vec3 {
+export interface BlockData {
+  type: BlockType;
+  x: number;
+  y: number;
+  z: number;
+  hp: number;
+}
+
+export interface NotificationEntry {
+  id: number;
+  key: string;
+  values?: Record<string, number | string>;
+  createdAt: number;
+}
+
+export interface InventoryState {
+  currentHotbarIndex: number;
+  hotbar: HotbarItemId[];
+  hasBow: boolean;
+  arrows: number;
+  blocks: number;
+  purpleDotters: number;
+  jumpPads: number;
+  toolTiers: Record<EquipmentId, ToolTier>;
+  currencies: Record<Currency, number>;
+}
+
+export interface ShopEntry {
+  id: string;
+  itemKey: string;
+  descriptionKey: string;
+  price: Price;
+  action:
+    | {
+        type: 'consumable';
+        item: 'blocks' | 'arrows' | 'purpleDotters' | 'jumpPads';
+        amount: number;
+      }
+    | {
+        type: 'unlock';
+        item: 'bow';
+      }
+    | {
+        type: 'upgrade';
+        item: EquipmentId;
+        tier: ToolTier;
+      };
+}
+
+export interface InteractionPrompt {
+  type: InteractableType;
+  id: string;
+  key: string;
+  distance: number;
+}
+
+export interface Vec3Like {
   x: number;
   y: number;
   z: number;
 }
 
-export interface IslandData {
+export interface MultiplayerPlayerSnapshot {
   id: string;
-  centerX: number;
-  centerZ: number;
-  size: number;
-  isMiddle: boolean;
-  crystalDestroyed: boolean;
+  name: string;
+  position: Vec3Like;
+  yaw: number;
+  health: number;
+  currentItem: HotbarItemId;
+  updatedAt: number;
 }
 
-export interface ChestData {
+export interface MultiplayerBlockOverride {
+  key: string;
   x: number;
   y: number;
   z: number;
-  opened: boolean;
-  loot: { item: string; amount: number }[];
+  type: BlockType | null;
 }
 
-export interface ShopItem {
-  id: string;
-  nameKey: string;
-  icon: string;
-  descKey: string;
-  currency: CurrencyType;
-  price: number;
-  action: () => void;
+export interface MultiplayerJumpPadState {
+  x: number;
+  y: number;
+  z: number;
 }
 
-export type GameScreen = 
-  | 'title' | 'settings' | 'tutorial' | 'playing' 
-  | 'paused' | 'shop' | 'win';
+export interface MultiplayerRoomSnapshot {
+  roomId: string;
+  publicRoomId: string;
+  seed: number;
+  players: MultiplayerPlayerSnapshot[];
+  destroyedCrystals: string[];
+  crystalHp: Record<string, number>;
+  blockOverrides: MultiplayerBlockOverride[];
+  jumpPads: MultiplayerJumpPadState[];
+}
