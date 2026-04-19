@@ -1,19 +1,12 @@
 import { defineConfig } from 'vite';
-import { multiplayerRelayPlugin } from './multiplayer-relay.mjs';
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [multiplayerRelayPlugin()],
+  // Use relative paths for assets so the project can be deployed 
+  // to any subdirectory on GitHub Pages without breaking links.
+  base: './',
   build: {
-    chunkSizeWarningLimit: 700
-  },
-  server: {
-    host: '127.0.0.1',
-    port: 5174,
-    strictPort: true
-  },
-  preview: {
-    host: '127.0.0.1',
-    port: 5174,
-    strictPort: true
+    outDir: 'dist',
+    assetsDir: 'assets'
   }
 });
