@@ -723,3 +723,97 @@ canvas {
   }
 }
 
+/* ========================================
+   Responsive UI Adjustments (Smartphones)
+   ======================================== */
+@media (max-width: 768px) {
+  /* Panels */
+  .settings-panel, .pause-panel {
+    min-width: auto;
+    width: 90%;
+    padding: 24px;
+  }
+  
+  .tutorial-panel {
+    width: 90%;
+    padding: 24px;
+  }
+  
+  .shop-panel {
+    min-width: auto;
+    width: 95%;
+    padding: 20px;
+  }
+
+  .shop-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  /* Titles */
+  .game-title {
+    font-size: 2.8rem;
+  }
+  
+  .win-title {
+    font-size: 3rem;
+  }
+  
+  .game-subtitle, .win-subtitle {
+    font-size: 1rem;
+    margin-bottom: 24px;
+    padding: 0 16px;
+  }
+  
+  /* Buttons */
+  .btn {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+  }
+  
+  /* HUD Elements */
+  #health-bar {
+    width: 200px;
+    bottom: 90px;
+  }
+
+  /* Hotbar - Scaled down for mobile width */
+  #hotbar {
+    width: 98vw;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  .hotbar-slot {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+  }
+  
+  .hotbar-slot .slot-icon {
+    font-size: 1.1rem;
+  }
+  
+  .hotbar-slot .slot-name {
+    display: none; /* Hide text on mobile to save space */
+  }
+
+  .hotbar-slot .slot-count, .hotbar-slot .slot-number {
+    font-size: 0.5rem;
+  }
+
+  /* Currency scaling */
+  #currency-display {
+    top: 50px;
+    transform: scale(0.85);
+    transform-origin: top right;
+  }
+
+  #objective-display {
+    top: 50px;
+    transform: translateX(-50%) scale(0.85);
+    white-space: nowrap;
+  }
+}
+
