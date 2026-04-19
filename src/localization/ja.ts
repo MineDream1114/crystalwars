@@ -7,9 +7,12 @@ export const ja: Record<string, string> = {
   startGame: 'ゲーム開始',
   settings: '設定',
   
-  // 設定
+  // 設定 & タイトル
   language: '言語',
   mouseSensitivity: 'マウス感度',
+  stage: 'ステージ選択',
+  mainlandMode: '🗺️ 無限の大陸',
+  islandsMode: '🏝️ 海洋と浮島',
   back: '戻る',
   
   // チュートリアル

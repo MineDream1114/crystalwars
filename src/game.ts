@@ -177,6 +177,13 @@ export class Game {
 
     // World
     this.world = new World(this.scene);
+    
+    // Set Stage Type
+    const stageSelect = document.getElementById('stage-select') as HTMLSelectElement;
+    if (stageSelect) {
+      this.world.stageType = stageSelect.value as ('mainland' | 'islands');
+    }
+
     this.world.generate();
 
     // Ocean plane
@@ -210,9 +217,10 @@ export class Game {
     this.crystalManager = new CrystalManager(this.scene);
     for (let i = 0; i < 8; i++) {
         const loc = this.world.crystalLocations[i];
-        // We ensure chunks at crystal exist to get surface Y
+        // If mainland, we ensure chunk is loaded to get specific noise Y. 
+        // If islands, the island is at Y=SEA_LEVEL+2 basically, but let's just query it safely.
         this.world.updateChunks(loc.x, loc.z);
-        const surfaceY = this.world.getSurfaceY(loc.x, loc.z);
+        const surfaceY = Math.max(SEA_LEVEL + 1, this.world.getSurfaceY(loc.x, loc.z));
         
         // create dummy island-like data for compat
         const dummyIsland = {
@@ -226,7 +234,7 @@ export class Game {
         this.crystalManager.createCrystal(dummyIsland, surfaceY);
         
         // Add a giant beacon pillar block above it so it can be seen from afar
-        for(let py = surfaceY + 4; py < surfaceY + 20; py++) {
+        for(let py = surfaceY + 4; py < surfaceY + 15; py++) {
            this.world.setBlock(loc.x, py, loc.z + 2, 'diamond');
         }
     }

@@ -94,7 +94,7 @@ export class MobileControls {
     document.addEventListener('touchstart', (e) => {
       // Don't capture touches on buttons or HUD elements
       const target = e.target as HTMLElement;
-      if (target.tagName === 'BUTTON' || target.closest('.hud-element')) return;
+      if (target.tagName === 'BUTTON' || target.closest('.hotbar-slot') || target.closest('#hotbar')) return;
       
       for (let i = 0; i < e.changedTouches.length; i++) {
         const touch = e.changedTouches[i];

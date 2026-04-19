@@ -7,9 +7,12 @@ export const en: Record<string, string> = {
   startGame: 'Start Game',
   settings: 'Settings',
   
-  // Settings
+  // Settings & Title
   language: 'Language',
   mouseSensitivity: 'Mouse Sensitivity',
+  stage: 'Stage / Map',
+  mainlandMode: '🗺️ Infinite Mainland',
+  islandsMode: '🏝️ Floating Islands',
   back: 'Back',
   
   // Tutorial

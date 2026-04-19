@@ -1,154 +1,70 @@
-export type Language = 'en' | 'ja';
+/**
+ * Crystal Wars - Shared Type Definitions
+ */
 
-export type GamePhase = 'title' | 'playing' | 'paused' | 'shop' | 'win';
+import { ToolTier } from './config';
 
-export type MultiplayerStatus = 'offline' | 'connecting' | 'online';
+export type CurrencyType = 'copper' | 'gold' | 'emerald' | 'diamond';
 
-export type Currency = 'copper' | 'gold' | 'emerald' | 'diamond';
-
-export type ToolTier = 'basic' | 'iron' | 'diamond' | 'rainbow';
-
-export type EquipmentId = 'sword' | 'pickaxe' | 'shovel';
-
-export type HotbarItemId =
-  | EquipmentId
-  | 'bow'
-  | 'blocks'
-  | 'purpleDotter'
-  | 'jumpPad';
-
-export type BlockType =
-  | 'grass'
-  | 'dirt'
-  | 'stone'
-  | 'sand'
-  | 'copperOre'
-  | 'goldOre'
-  | 'emeraldOre'
-  | 'diamondOre'
-  | 'bridge';
-
-export type BlockCategory = 'soft' | 'hard' | 'ore' | 'utility';
-
-export type InteractableType =
-  | 'merchant'
-  | 'generator'
-  | 'machine'
-  | 'chest'
-  | 'jumpPad';
-
-export interface Price {
-  currency: Currency;
-  amount: number;
+export interface Currency {
+  copper: number;
+  gold: number;
+  emerald: number;
+  diamond: number;
 }
 
-export interface ToolStats {
-  damage: number;
-  blockDamage: number;
-  cooldown: number;
-  range: number;
+export type ItemId = 
+  | 'sword' | 'pickaxe' | 'shovel' | 'bow' 
+  | 'arrows' | 'purpleDotter' | 'jumpPad' | 'block';
+
+export interface ItemDef {
+  id: ItemId;
+  icon: string;
+  nameKey: string;      // i18n key
+  stackable: boolean;
+  maxStack: number;
+  tier?: ToolTier;
 }
 
-export interface BlockDefinition {
-  color: number;
-  category: BlockCategory;
-  hp: number;
-  solid: boolean;
+export interface HotbarSlot {
+  itemId: ItemId | null;
+  count: number;
+  tier: ToolTier;
 }
 
-export interface BlockData {
-  type: BlockType;
+export interface Vec3 {
   x: number;
   y: number;
   z: number;
-  hp: number;
 }
 
-export interface NotificationEntry {
-  id: number;
-  key: string;
-  values?: Record<string, number | string>;
-  createdAt: number;
-}
-
-export interface InventoryState {
-  currentHotbarIndex: number;
-  hotbar: HotbarItemId[];
-  hasBow: boolean;
-  arrows: number;
-  blocks: number;
-  purpleDotters: number;
-  jumpPads: number;
-  toolTiers: Record<EquipmentId, ToolTier>;
-  currencies: Record<Currency, number>;
-}
-
-export interface ShopEntry {
+export interface IslandData {
   id: string;
-  itemKey: string;
-  descriptionKey: string;
-  price: Price;
-  action:
-    | {
-        type: 'consumable';
-        item: 'blocks' | 'arrows' | 'purpleDotters' | 'jumpPads';
-        amount: number;
-      }
-    | {
-        type: 'unlock';
-        item: 'bow';
-      }
-    | {
-        type: 'upgrade';
-        item: EquipmentId;
-        tier: ToolTier;
-      };
+  centerX: number;
+  centerZ: number;
+  size: number;
+  isMiddle: boolean;
+  crystalDestroyed: boolean;
 }
 
-export interface InteractionPrompt {
-  type: InteractableType;
+export interface ChestData {
+  x: number;
+  y: number;
+  z: number;
+  opened: boolean;
+  loot: { item: string; amount: number }[];
+}
+
+export interface ShopItem {
   id: string;
-  key: string;
-  distance: number;
+  nameKey: string;
+  icon: string;
+  descKey: string;
+  currency: CurrencyType;
+  price: number;
+  action: () => void;
 }
 
-export interface Vec3Like {
-  x: number;
-  y: number;
-  z: number;
-}
-
-export interface MultiplayerPlayerSnapshot {
-  id: string;
-  name: string;
-  position: Vec3Like;
-  yaw: number;
-  health: number;
-  currentItem: HotbarItemId;
-  updatedAt: number;
-}
-
-export interface MultiplayerBlockOverride {
-  key: string;
-  x: number;
-  y: number;
-  z: number;
-  type: BlockType | null;
-}
-
-export interface MultiplayerJumpPadState {
-  x: number;
-  y: number;
-  z: number;
-}
-
-export interface MultiplayerRoomSnapshot {
-  roomId: string;
-  publicRoomId: string;
-  seed: number;
-  players: MultiplayerPlayerSnapshot[];
-  destroyedCrystals: string[];
-  crystalHp: Record<string, number>;
-  blockOverrides: MultiplayerBlockOverride[];
-  jumpPads: MultiplayerJumpPadState[];
-}
+export type GameScreen = 
+  | 'title' | 'settings' | 'tutorial' | 'playing' 
+  | 'paused' | 'shop' | 'win';

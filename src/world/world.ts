@@ -8,7 +8,10 @@ import { CHUNK_Y, CHUNK_X } from '../config';
 import { ChestData } from '../types';
 import { Chunk } from './chunk';
 import { generateTerrainChunk } from './terrain';
+import { generateIslandsChunk } from './islandsTerrain';
 import { registerChests, resetChests } from './chest';
+
+export type StageType = 'mainland' | 'islands';
 
 const RENDER_DISTANCE = 6; // Chunks
 
@@ -21,6 +24,8 @@ export class World {
   private seed: number;
   private lastChunkX: number = -999;
   private lastChunkZ: number = -999;
+  
+  public stageType: StageType = 'mainland';
 
   constructor(scene: THREE.Scene) {
     this.scene = scene;
@@ -76,7 +81,13 @@ export class World {
         visibleKeys.add(key);
 
         if (!this.chunks.has(key)) {
-          const result = generateTerrainChunk(chunkX, chunkZ, this.seed);
+          let result;
+          if (this.stageType === 'mainland') {
+            result = generateTerrainChunk(chunkX, chunkZ, this.seed);
+          } else {
+            result = generateIslandsChunk(chunkX, chunkZ, this.seed, this.crystalLocations);
+          }
+          
           this.chunks.set(key, result.chunk);
           if (result.chests.length > 0) {
             chestsAdded = chestsAdded.concat(result.chests);
@@ -135,7 +146,13 @@ export class World {
     
     if (!chunk) {
       // Create new chunk if we try to place a block far away
-      const result = generateTerrainChunk(chunkX, chunkZ, this.seed);
+      let result;
+      if (this.stageType === 'mainland') {
+        result = generateTerrainChunk(chunkX, chunkZ, this.seed);
+      } else {
+        result = generateIslandsChunk(chunkX, chunkZ, this.seed, this.crystalLocations);
+      }
+      
       chunk = result.chunk;
       this.chunks.set(key, chunk);
       if (result.chests.length > 0) {
