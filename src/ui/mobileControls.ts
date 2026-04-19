@@ -53,7 +53,17 @@ export class MobileControls {
     // DOCUMENT MOVEMENT & LOOKING
     document.addEventListener('touchmove', (e) => {
       // Don't prevent default on UI elements
-      if ((e.target as HTMLElement).tagName === 'BUTTON') return;
+      const target = e.target as HTMLElement;
+      if (
+        target.tagName === 'BUTTON' || 
+        target.tagName === 'SELECT' ||
+        target.tagName === 'OPTION' ||
+        target.closest('.screen') || 
+        target.closest('.hotbar-slot') || 
+        target.closest('#hotbar')
+      ) {
+        return;
+      }
       e.preventDefault(); 
       
       for (let i = 0; i < e.changedTouches.length; i++) {
@@ -92,9 +102,18 @@ export class MobileControls {
 
     // DOCUMENT START TOUCH (For Look)
     document.addEventListener('touchstart', (e) => {
-      // Don't capture touches on buttons or HUD elements
+      // Don't capture touches on UI panels, buttons, select dropdowns, or HUD elements
       const target = e.target as HTMLElement;
-      if (target.tagName === 'BUTTON' || target.closest('.hotbar-slot') || target.closest('#hotbar')) return;
+      if (
+        target.tagName === 'BUTTON' || 
+        target.tagName === 'SELECT' ||
+        target.tagName === 'OPTION' ||
+        target.closest('.screen') || 
+        target.closest('.hotbar-slot') || 
+        target.closest('#hotbar')
+      ) {
+        return;
+      }
       
       for (let i = 0; i < e.changedTouches.length; i++) {
         const touch = e.changedTouches[i];
