@@ -1,0 +1,606 @@
+/* ========================================
+   Crystal Wars - Main Stylesheet
+   ======================================== */
+
+:root {
+  --color-bg: #0a0a1a;
+  --color-primary: #8b5cf6;
+  --color-primary-glow: #a78bfa;
+  --color-secondary: #1e1e3a;
+  --color-accent: #f59e0b;
+  --color-text: #e2e8f0;
+  --color-text-dim: #94a3b8;
+  --color-danger: #ef4444;
+  --color-success: #22c55e;
+  --color-copper: #cd7f32;
+  --color-gold: #ffd700;
+  --color-emerald: #50c878;
+  --color-diamond: #b9f2ff;
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  background: var(--color-bg);
+  font-family: var(--font-body);
+  color: var(--color-text);
+  cursor: default;
+  user-select: none;
+}
+
+canvas {
+  display: block;
+}
+
+#game-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+#game-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* ========================================
+   Screens (Overlays)
+   ======================================== */
+
+.screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  background: rgba(5, 5, 20, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+
+.btn {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary), #6d28d9);
+  color: white;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   Title Screen
+   ======================================== */
+
+.title-content {
+  text-align: center;
+}
+
+.game-title {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6, #f59e0b, #ef4444);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleGradient 4s ease infinite;
+  text-shadow: none;
+  filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.5));
+  margin-bottom: 16px;
+}
+
+@keyframes titleGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.game-subtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-dim);
+  margin-bottom: 48px;
+  letter-spacing: 2px;
+}
+
+.title-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+/* ========================================
+   Settings
+   ======================================== */
+
+.settings-panel, .pause-panel {
+  background: var(--color-secondary);
+  border-radius: 16px;
+  padding: 40px;
+  min-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.settings-panel h2, .pause-panel h2 {
+  font-family: var(--font-display);
+  margin-bottom: 32px;
+  text-align: center;
+  color: var(--color-primary-glow);
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.setting-row label {
+  font-weight: 600;
+}
+
+.setting-row select, .setting-row input[type="range"] {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: var(--color-text);
+  padding: 8px 12px;
+  font-size: 0.9rem;
+}
+
+.settings-panel .btn, .pause-panel .btn {
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* ========================================
+   Tutorial
+   ======================================== */
+
+.tutorial-panel {
+  background: var(--color-secondary);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 600px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+}
+
+.tutorial-panel h2 {
+  font-family: var(--font-display);
+  margin-bottom: 24px;
+  text-align: center;
+  color: var(--color-primary-glow);
+}
+
+.tutorial-content {
+  line-height: 1.8;
+  margin-bottom: 24px;
+  color: var(--color-text-dim);
+}
+
+.tutorial-content kbd {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-family: var(--font-body);
+  color: var(--color-primary-glow);
+  font-size: 0.85em;
+}
+
+.tutorial-panel .btn {
+  width: 100%;
+}
+
+/* ========================================
+   HUD
+   ======================================== */
+
+.hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.hud.hidden {
+  display: none;
+}
+
+#crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+  font-weight: 300;
+}
+
+#health-bar {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#health-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--color-danger), #f97316);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+#health-text {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+#currency-display {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.currency {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px 12px;
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.currency-icon {
+  font-size: 12px;
+}
+
+.copper-icon { color: var(--color-copper); }
+.gold-icon { color: var(--color-gold); }
+.emerald-icon { color: var(--color-emerald); }
+.diamond-icon { color: var(--color-diamond); }
+
+#objective-display {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 8px 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+  font-size: 0.85rem;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+#crystal-count {
+  color: var(--color-primary-glow);
+  font-weight: 700;
+}
+
+#hotbar {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+}
+
+.hotbar-slot {
+  width: 56px;
+  height: 56px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--color-text-dim);
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.hotbar-slot.active {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
+  background: rgba(139, 92, 246, 0.15);
+}
+
+.hotbar-slot .slot-icon {
+  font-size: 1.4rem;
+  margin-bottom: 2px;
+}
+
+.hotbar-slot .slot-name {
+  font-size: 0.55rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 50px;
+}
+
+.hotbar-slot .slot-count {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 0.6rem;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.hotbar-slot .slot-number {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+#interact-prompt {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  animation: pulsePrompt 2s ease-in-out infinite;
+}
+
+@keyframes pulsePrompt {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+#notification {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(4px);
+  animation: slideDown 0.3s ease;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+  to { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ========================================
+   Shop UI
+   ======================================== */
+
+.shop-panel {
+  background: var(--color-secondary);
+  border-radius: 16px;
+  padding: 32px;
+  min-width: 700px;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
+  pointer-events: all;
+}
+
+.shop-panel h2 {
+  font-family: var(--font-display);
+  margin-bottom: 24px;
+  text-align: center;
+  color: var(--color-primary-glow);
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.shop-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.2s ease;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.shop-item:hover {
+  border-color: var(--color-primary);
+  background: rgba(139, 92, 246, 0.08);
+  transform: translateY(-2px);
+}
+
+.shop-item.cannot-afford {
+  opacity: 0.5;
+}
+
+.shop-item .item-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.shop-item .item-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+}
+
+.shop-item .item-price {
+  font-size: 0.75rem;
+  color: var(--color-accent);
+}
+
+.shop-item .item-desc {
+  font-size: 0.7rem;
+  color: var(--color-text-dim);
+  margin-top: 4px;
+}
+
+.shop-panel .btn {
+  width: 100%;
+}
+
+/* ========================================
+   Win Screen
+   ======================================== */
+
+.win-content {
+  text-align: center;
+}
+
+.win-title {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #ffd700, #f59e0b, #ef4444, #8b5cf6);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleGradient 3s ease infinite;
+  filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.5));
+  margin-bottom: 16px;
+}
+
+.win-subtitle {
+  font-size: 1.3rem;
+  color: var(--color-text-dim);
+  margin-bottom: 48px;
+}
+
+/* ========================================
+   Scrollbar
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 3px;
+}
+
+/* ========================================
+   Mining progress bar
+   ======================================== */
+   
+#mining-progress {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+#mining-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: 3px;
+  transition: width 0.05s linear;
+}

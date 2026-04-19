@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Crystal Wars - A first-person 3D island action game" />
+  <title>Crystal Wars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+  </div>
+
+  <!-- Title Screen -->
+  <div id="title-screen" class="screen active">
+    <div class="title-content">
+      <h1 class="game-title">CRYSTAL WARS</h1>
+      <p class="game-subtitle" data-i18n="titleSubtitle">Destroy the crystals. Conquer the islands.</p>
+      <div class="title-buttons">
+        <button id="btn-start" class="btn btn-primary" data-i18n="startGame">Start Game</button>
+        <button id="btn-settings" class="btn btn-secondary" data-i18n="settings">Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Screen -->
+  <div id="settings-screen" class="screen">
+    <div class="settings-panel">
+      <h2 data-i18n="settings">Settings</h2>
+      <div class="setting-row">
+        <label data-i18n="language">Language</label>
+        <select id="language-select">
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <label data-i18n="mouseSensitivity">Mouse Sensitivity</label>
+        <input type="range" id="sensitivity-slider" min="1" max="10" value="5" />
+      </div>
+      <button id="btn-settings-back" class="btn btn-secondary" data-i18n="back">Back</button>
+    </div>
+  </div>
+
+  <!-- Tutorial Overlay -->
+  <div id="tutorial-overlay" class="screen">
+    <div class="tutorial-panel">
+      <h2 data-i18n="tutorialTitle">How to Play</h2>
+      <div class="tutorial-content" id="tutorial-content"></div>
+      <button id="btn-tutorial-close" class="btn btn-primary" data-i18n="letsGo">Let's Go!</button>
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud" class="hud hidden">
+    <div id="crosshair">+</div>
+    <div id="health-bar">
+      <div id="health-fill"></div>
+      <span id="health-text">100</span>
+    </div>
+    <div id="currency-display">
+      <span id="copper-count" class="currency"><span class="currency-icon copper-icon">●</span> <span class="currency-val">0</span></span>
+      <span id="gold-count" class="currency"><span class="currency-icon gold-icon">●</span> <span class="currency-val">0</span></span>
+      <span id="emerald-count" class="currency"><span class="currency-icon emerald-icon">●</span> <span class="currency-val">0</span></span>
+      <span id="diamond-count" class="currency"><span class="currency-icon diamond-icon">●</span> <span class="currency-val">0</span></span>
+    </div>
+    <div id="objective-display">
+      <span id="objective-text" data-i18n="objectiveDestroy">Destroy all 8 crystals!</span>
+      <span id="crystal-count">0 / 8</span>
+    </div>
+    <div id="hotbar"></div>
+    <div id="interact-prompt" class="hidden">
+      <span data-i18n="pressE">Press [E] to interact</span>
+    </div>
+    <div id="notification" class="hidden"></div>
+  </div>
+
+  <!-- Shop UI -->
+  <div id="shop-screen" class="screen">
+    <div class="shop-panel">
+      <h2 data-i18n="merchantShop">Merchant Shop</h2>
+      <div id="shop-items" class="shop-grid"></div>
+      <button id="btn-shop-close" class="btn btn-secondary" data-i18n="close">Close</button>
+    </div>
+  </div>
+
+  <!-- Pause Menu -->
+  <div id="pause-screen" class="screen">
+    <div class="pause-panel">
+      <h2 data-i18n="paused">Paused</h2>
+      <button id="btn-resume" class="btn btn-primary" data-i18n="resume">Resume</button>
+      <button id="btn-pause-settings" class="btn btn-secondary" data-i18n="settings">Settings</button>
+    </div>
+  </div>
+
+  <!-- Win Screen -->
+  <div id="win-screen" class="screen">
+    <div class="win-content">
+      <h1 class="win-title" data-i18n="victory">VICTORY!</h1>
+      <p class="win-subtitle" data-i18n="victoryMessage">You destroyed all the crystals!</p>
+      <button id="btn-restart" class="btn btn-primary" data-i18n="playAgain">Play Again</button>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
